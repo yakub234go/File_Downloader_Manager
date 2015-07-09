@@ -23,9 +23,7 @@ namespace File_Downloader_Manager
         }
 
         string file;
-        //http://files.avast.com/iavs9x/avast_free_antivirus_setup.exe
-        //http://kaz.dl.sourceforge.net/project/sevenzip/7-Zip/9.20/7z920-x64.msi
-        //http://fs36.filehippo.com/1363/d8c1b88fb61e4960a8cc4ceede139447/TorchSetupkFull-r0-n-bf.exe
+        //http://fs41.filehippo.com/7489/c8d4bcf7a0f54cc08070e08f16d48aba/fdminst.exe
         private void downloadbtn_Click(object sender, EventArgs e)
         {
             file = richTextBox1.Text;
@@ -56,15 +54,23 @@ namespace File_Downloader_Manager
             byte[] buffer = new byte[1024];
             int bytesize = 0;
             Int64 test = 0;
-            while ((bytesize=str.Read(buffer,0,buffer.Length))>0)
+            while ((bytesize = str.Read(buffer, 0, buffer.Length)) > 0)
             {
-                fs.Write(buffer, 0, bytesize);
-                test += bytesize;
-                double index = (double)test;
-                double total = (double)wres.ContentLength;
-                double percentage = (index / total);
-                int per = (int)(percentage * 100);
-                backgroundWorker1.ReportProgress(per);
+                if (backgroundWorker1.CancellationPending.Equals(true))
+                {
+                    e.Cancel = true;
+                    break;
+                }
+                else
+                {
+                    fs.Write(buffer, 0, bytesize);
+                    test += bytesize;
+                    double index = (double)test;
+                    double total = (double)wres.ContentLength;
+                    double percentage = (index / total);
+                    int per = (int)(percentage * 100);
+                    backgroundWorker1.ReportProgress(per);
+                }
             }
             fs.Close();
             str.Close();
@@ -87,7 +93,6 @@ namespace File_Downloader_Manager
             if (backgroundWorker1.IsBusy.Equals(true))
             {
                 backgroundWorker1.CancelAsync();
-                
             }
         }
     }
