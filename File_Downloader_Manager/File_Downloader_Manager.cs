@@ -15,6 +15,7 @@ namespace File_Downloader_Manager
 {
     public partial class File_Downloader_Manager : Form
     {
+        bool is_downloading, is_paused, is_stopped;
         public File_Downloader_Manager()
         {
             InitializeComponent();
@@ -26,7 +27,9 @@ namespace File_Downloader_Manager
         //http://fs41.filehippo.com/7489/c8d4bcf7a0f54cc08070e08f16d48aba/fdminst.exe
         private void downloadbtn_Click(object sender, EventArgs e)
         {
+            downloadbtn.Enabled = false;
             file = richTextBox1.Text;
+            is_downloading = true;
             backgroundWorker1.RunWorkerAsync();
         }
 
@@ -60,6 +63,7 @@ namespace File_Downloader_Manager
                 {
                     e.Cancel = true;
                     break;
+                    is_downloading = false;
                 }
                 else
                 {
@@ -85,7 +89,14 @@ namespace File_Downloader_Manager
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (is_paused)
+                MessageBox.Show("Download paused");
+            else if(is_stopped)
+                MessageBox.Show("Download stopped");
+            else
             MessageBox.Show("File download complete");
+
+            downloadbtn.Enabled = true;
         }
 
         private void pausebtn_Click(object sender, EventArgs e)
@@ -93,6 +104,7 @@ namespace File_Downloader_Manager
             if (backgroundWorker1.IsBusy.Equals(true))
             {
                 backgroundWorker1.CancelAsync();
+                is_paused = true;
             }
         }
 
@@ -101,6 +113,7 @@ namespace File_Downloader_Manager
             if (backgroundWorker1.IsBusy.Equals(true))
             {
                 backgroundWorker1.CancelAsync();
+                is_stopped = true;
             }
         }
     }
