@@ -95,5 +95,13 @@ namespace File_Downloader_Manager
                 backgroundWorker1.CancelAsync();
             }
         }
+
+        private void stopbtn_Click(object sender, EventArgs e)
+        {
+            if (backgroundWorker1.IsBusy.Equals(true))
+            {
+                backgroundWorker1.CancelAsync();
+            }
+        }
     }
 }

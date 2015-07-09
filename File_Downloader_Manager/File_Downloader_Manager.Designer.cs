@@ -100,6 +100,7 @@
             this.stopbtn.Text = "Stop";
             this.stopbtn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.stopbtn.UseVisualStyleBackColor = true;
+            this.stopbtn.Click += new System.EventHandler(this.stopbtn_Click);
             // 
             // richTextBox1
             // 
